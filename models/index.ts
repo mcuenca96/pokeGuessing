@@ -1,0 +1,6 @@
+export * from './NamedAPIResource'
+export * from './Pokemon'
+export * from './PokemonAbility'
+export * from './PokemonMove'
+export * from './PokemonSprites'
+export * from './PokemonType'
