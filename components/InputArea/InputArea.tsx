@@ -7,6 +7,7 @@ const InputArea = ({ onChange, value }: InputAreaProps) => {
       className="p-3 rounded lowercase"
       onChange={onChange}
       value={value}
+      placeholder={`Who's that pokemon?`}
     />
   );
 };

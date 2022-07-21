@@ -18,9 +18,12 @@
     "paths": {
       "@components/*": ["components/*"],
       "@models/*": ["models/*"],
-      "@hooks": ["hooks"],
+      "@hooks": ["hooks/index.ts"],
+      "@utils": ["utils/index.ts"],
       "@models": ["models/index.ts"],
       "@store": ["store/index.ts"],
+      "@common/*": ["common/*"],
+    
     },
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
