@@ -1,24 +1,25 @@
 import { useEffect, useCallback } from "react";
 import useStore from "@store";
 import C from "@common/constants";
+import { getRandomPokemonId } from "@utils";
 
 const { POKEMONS_PER_GENERATION, HAS_GUESSED_IT_TIMEOUT } = C;
 
 const useGetPokemon = (hasGuessedIt: boolean) => {
-  const { currentPokemon, setCurrentPokemon, setInputText } = useStore();
+  const { currentPokemon, generations, setCurrentPokemon, setInputText } =
+    useStore();
 
   const getNewPokemon = useCallback(() => {
-    const firstGenerationRandomPokemonId =
-      Math.floor(Math.random() * POKEMONS_PER_GENERATION[1]) + 1;
+    const randomGenerationsPokemonId = getRandomPokemonId(generations);
     fetch(
-      `${process.env.NEXT_PUBLIC_POKEMON_API_BASE_URL}pokemon/${firstGenerationRandomPokemonId}`
+      `${process.env.NEXT_PUBLIC_POKEMON_API_BASE_URL}pokemon/${randomGenerationsPokemonId}`
     )
       .then(async (response) => {
         const pokemonData = await response.json();
         setCurrentPokemon(pokemonData);
       })
       .catch((error) => console.error(error));
-  }, [setCurrentPokemon]);
+  }, [generations, setCurrentPokemon]);
 
   useEffect(() => {
     if (hasGuessedIt) {
