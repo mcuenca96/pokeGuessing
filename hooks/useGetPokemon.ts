@@ -1,43 +1,39 @@
+import { useEffect, useCallback } from "react";
 import useStore from "@store";
-import { useEffect } from "react";
+import C from "@common/constants";
 
-
-const POKEMONS_PER_GENERATION = {
-    1: 151,
-    2: 251,
-    3: 386,
-    4: 493,
-    5: 649,
-  };
+const { POKEMONS_PER_GENERATION, HAS_GUESSED_IT_TIMEOUT } = C;
 
 const useGetPokemon = (hasGuessedIt: boolean) => {
-    const { currentPokemon, setCurrentPokemon, setInputText } = useStore();
+  const { currentPokemon, setCurrentPokemon, setInputText } = useStore();
 
-    useEffect(() => {
-      const getNewPokemon = () => {
-        const firstGenerationRandomPokemonId =
-          Math.floor(Math.random() * POKEMONS_PER_GENERATION[1]) + 1;
-        fetch(
-          `${process.env.NEXT_PUBLIC_POKEMON_API_BASE_URL}pokemon/${firstGenerationRandomPokemonId}`
-        )
-          .then(async (response) => {
-            const pokemonData = await response.json();
-            setCurrentPokemon(pokemonData);
-          })
-          .catch((error) => console.error(error));
-      }
-      if(hasGuessedIt){
-        setTimeout(() => {
-          setInputText('')
-          getNewPokemon()
-        }, 3000)
-      }
-      else {
-        getNewPokemon()
-      }
-    }, [hasGuessedIt, setCurrentPokemon, setInputText]);
+  const getNewPokemon = useCallback(() => {
+    const firstGenerationRandomPokemonId =
+      Math.floor(Math.random() * POKEMONS_PER_GENERATION[1]) + 1;
+    fetch(
+      `${process.env.NEXT_PUBLIC_POKEMON_API_BASE_URL}pokemon/${firstGenerationRandomPokemonId}`
+    )
+      .then(async (response) => {
+        const pokemonData = await response.json();
+        setCurrentPokemon(pokemonData);
+      })
+      .catch((error) => console.error(error));
+  }, [setCurrentPokemon]);
 
-    return currentPokemon
-}
+  useEffect(() => {
+    if (hasGuessedIt) {
+      setTimeout(() => {
+        setInputText("");
+        getNewPokemon();
+      }, HAS_GUESSED_IT_TIMEOUT);
+    }
+  }, [getNewPokemon, hasGuessedIt, setInputText]);
 
-export default useGetPokemon
+  useEffect(() => {
+    getNewPokemon();
+  }, [getNewPokemon]);
+
+  return currentPokemon;
+};
+
+export default useGetPokemon;
