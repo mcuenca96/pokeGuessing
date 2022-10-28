@@ -5,7 +5,7 @@ import { ALL } from "dns";
 
 const { POKEMONS_PER_GENERATION } = C;
 
-export interface PokemonSlice {
+export type PokemonSlice = {
   currentPokemon?: Pokemon;
   generations: Array<keyof typeof POKEMONS_PER_GENERATION>;
   setCurrentPokemon: (newPokemon: Pokemon) => void;
@@ -16,7 +16,7 @@ export interface PokemonSlice {
 
 const createPokemonSlice: StateCreator<PokemonSlice> = (set) => ({
   currentPokemon: undefined,
-  generations: [2, 3, 4, 5],
+  generations: [1, 2, 3, 4, 5],
   setCurrentPokemon: (newPokemon) =>
     set(() => ({ currentPokemon: newPokemon })),
   setCurrentGenerations: (generation) =>
